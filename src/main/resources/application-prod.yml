@@ -1,0 +1,9 @@
+spring:
+  application:
+    name: ${project.artifactId}
+  datasource:
+    url: jdbc:postgresql://localhost:5432/release_notes
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWD}
+  flyway:
+    locations: classpath:db/postgresmigration

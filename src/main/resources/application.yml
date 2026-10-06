@@ -1,0 +1,26 @@
+spring:
+  application:
+    name: ${project.artifactId}
+  jpa:
+    hibernate.ddl-auto: none
+    show-sql: true
+  flyway:
+    enabled: true
+    baseline-on-migrate: false
+    table: flyway_schema_history
+
+project:
+  artifactId: '@project.artifactId@'
+  appName: '@appName@'
+  name: '@project.name@'
+  version: '@project.version@'
+  description: '@project.description@'
+  groupId: '@project.groupId@'
+
+springdoc:
+  show-actuator: false
+  packagesToScan: com.dbcargo
+  api-docs:
+    path: /v3/api-docs
+
+
