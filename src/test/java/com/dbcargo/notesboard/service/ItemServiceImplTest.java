@@ -6,6 +6,7 @@ import com.dbcargo.notesboard.domain.entities.ApplicationEntity;
 import com.dbcargo.notesboard.domain.entities.ItemEntity;
 import com.dbcargo.notesboard.domain.exception.DuplicatedItemException;
 import com.dbcargo.notesboard.domain.exception.ItemNotFoundException;
+import com.dbcargo.notesboard.domain.exception.ItemNotSavedException;
 import com.dbcargo.notesboard.repository.ApplicationsRepository;
 import com.dbcargo.notesboard.repository.ItemsRepository;
 import org.junit.jupiter.api.Test;
@@ -69,6 +70,18 @@ public class ItemServiceImplTest {
         when(itemsRepository.findByRelease(anyString())).thenReturn(ItemEntity.builder().release("Note1").status("DRAFT").build());
 
         assertThrows(DuplicatedItemException.class, () -> itemService.save(request));
+    }
+
+    @Test
+    void testSaveKO_applicationNotFound() {
+        ItemRequest request = new ItemRequest();
+        request.setRelease("Note1");
+        request.setStatus("DRAFT");
+
+        when(applicationsRepository.findById(any())).thenReturn(Optional.empty());
+        when(itemsRepository.findByRelease(anyString())).thenReturn(null);
+
+        assertThrows(ItemNotSavedException.class, () -> itemService.save(request));
     }
 
     @Test
