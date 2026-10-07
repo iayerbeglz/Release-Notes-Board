@@ -26,7 +26,7 @@ public class ItemsController {
 
     @PostMapping("/items")
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<ItemResponse> save(@RequestBody ItemRequest request) {
+    public ResponseEntity<ItemResponse> save(@RequestBody @Valid ItemRequest request) {
         return itemService.save(request)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.badRequest().build());

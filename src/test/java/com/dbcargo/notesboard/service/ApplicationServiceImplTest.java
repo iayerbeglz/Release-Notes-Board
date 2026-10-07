@@ -9,6 +9,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -38,5 +39,12 @@ public class ApplicationServiceImplTest {
         when(applicationsRepository.findAll()).thenReturn(List.of());
 
         assertTrue(applicationService.findAll().isEmpty());
+    }
+
+    @Test
+    void testFindByIdOK() {
+        when(applicationsRepository.findById(1l)).thenReturn(Optional.of(ApplicationEntity.builder().name("App1").build()));
+
+        assertNotNull(applicationService.findById(1l));
     }
 }

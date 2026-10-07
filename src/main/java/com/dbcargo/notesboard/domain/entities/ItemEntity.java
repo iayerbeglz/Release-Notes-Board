@@ -27,4 +27,7 @@ public class ItemEntity {
     @Column(name = "status")
     private String status;
 
+    @ManyToOne
+    @JoinColumn(name="application_id")
+    private ApplicationEntity application;
 }

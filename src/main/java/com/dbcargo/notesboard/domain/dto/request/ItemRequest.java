@@ -1,6 +1,7 @@
 package com.dbcargo.notesboard.domain.dto.request;
 
 import com.dbcargo.notesboard.validations.ItemStatusConstraint;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
@@ -13,4 +14,6 @@ public class ItemRequest {
     @ItemStatusConstraint(message = "Allowed values are DRAFT, PREVIEW, PUBLISHED")
     private String status;
 
+    @NotNull
+    private Long application;
 }

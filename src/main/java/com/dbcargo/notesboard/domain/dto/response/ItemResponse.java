@@ -12,4 +12,6 @@ public class ItemResponse {
     private String description;
 
     private String status;
+
+    private String application;
 }

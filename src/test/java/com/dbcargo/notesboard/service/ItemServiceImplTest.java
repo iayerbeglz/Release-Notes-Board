@@ -2,9 +2,11 @@ package com.dbcargo.notesboard.service;
 
 import com.dbcargo.notesboard.domain.dto.request.ItemRequest;
 import com.dbcargo.notesboard.domain.dto.response.ItemResponse;
+import com.dbcargo.notesboard.domain.entities.ApplicationEntity;
 import com.dbcargo.notesboard.domain.entities.ItemEntity;
 import com.dbcargo.notesboard.domain.exception.DuplicatedItemException;
 import com.dbcargo.notesboard.domain.exception.ItemNotFoundException;
+import com.dbcargo.notesboard.repository.ApplicationsRepository;
 import com.dbcargo.notesboard.repository.ItemsRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -26,6 +28,9 @@ public class ItemServiceImplTest {
     @Mock
     private ItemsRepository itemsRepository;
 
+    @Mock
+    private ApplicationsRepository applicationsRepository;
+
     @InjectMocks
     private ItemServiceImpl itemService;
 
@@ -33,8 +38,8 @@ public class ItemServiceImplTest {
     void findAll() {
         when(itemsRepository.findAll())
                 .thenReturn(List.of(
-                        ItemEntity.builder().release("Note1").status("DRAFT").build(),
-                        ItemEntity.builder().release("Note2").status("PREVIEW").build()));
+                        ItemEntity.builder().release("Note1").status("DRAFT").application(ApplicationEntity.builder().build()).build(),
+                        ItemEntity.builder().release("Note2").status("PREVIEW").application(ApplicationEntity.builder().build()).build()));
 
         assertNotNull(itemService.findAll());
     }
@@ -45,8 +50,10 @@ public class ItemServiceImplTest {
         request.setRelease("Note1");
         request.setStatus("DRAFT");
 
+        ApplicationEntity application = ApplicationEntity.builder().name("App1").build();
+        when(applicationsRepository.findById(any())).thenReturn(Optional.of(application));
         when(itemsRepository.findByRelease(anyString())).thenReturn(null);
-        when(itemsRepository.save(any())).thenReturn(ItemEntity.builder().release("Note1").status("DRAFT").build());
+        when(itemsRepository.save(any())).thenReturn(ItemEntity.builder().release("Note1").status("DRAFT").application(application).build());
 
         Optional<ItemResponse> result = itemService.save(request);
         assertTrue(result.isPresent());
@@ -61,7 +68,6 @@ public class ItemServiceImplTest {
 
         when(itemsRepository.findByRelease(anyString())).thenReturn(ItemEntity.builder().release("Note1").status("DRAFT").build());
 
-        ;
         assertThrows(DuplicatedItemException.class, () -> itemService.save(request));
     }
 
